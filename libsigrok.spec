@@ -1,6 +1,6 @@
 Name:           libsigrok
 Version:        0.1.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -34,7 +34,6 @@ developing applications that use %{name}.
 %package        doc
 Group:          Documentation
 Summary:        API documentation for %{name}
-Requires:       %{name} = %{version}-%{release}
 BuildArch:      noarch
 
 %description    doc
@@ -78,19 +77,23 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files
 %defattr(-,root,root,-)
 %doc README NEWS COPYING ChangeLog
-%{_libdir}/*.so.*
+%{_libdir}/libsigrok.so.0*
 
 %files devel
 %defattr(-,root,root,-)
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
+%{_includedir}/sigrok*.h
+%{_libdir}/libsigrok.so
+%{_libdir}/pkgconfig/libsigrok.pc
 
 %files doc
 %defattr(-,root,root,-)
 %doc doxy/html/
 
 %changelog
+* Wed Mar 13 2013 Alexandru Gagniuc <mr.nuke.me@gmail.com> - 0.1.1-3
+- Drop dependency of -doc subpackage
+- Use explicit soversion in files section
+
 * Sat Dec 01 2012 Alexandru Gagniuc <mr.nuke.me@gmail.com> - 0.1.1-2
 - Add comment explaining chioce of license
 - Removed  _missing_build_ids_terminate_build undef
