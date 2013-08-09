@@ -1,6 +1,6 @@
 Name:           libsigrok
-Version:        0.2.0
-Release:        2%{?dist}
+Version:        0.2.1
+Release:        1%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -71,7 +71,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%doc README NEWS COPYING
+%doc README README.devices NEWS COPYING
 %{_libdir}/libsigrok.so.1*
 /lib/udev/rules.d/60_libsigrok.rules
 
@@ -84,6 +84,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc doxy/html-api/
 
 %changelog
+* Fri Aug 09 2013 Alexandru Gagniuc <mr.nuke.me@gmail.com> - 0.2.0-1
+- Update to libsigrok 0.2.1
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.2.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
