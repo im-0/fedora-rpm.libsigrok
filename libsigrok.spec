@@ -1,6 +1,6 @@
 Name:           libsigrok
 Version:        0.2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -84,6 +84,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc doxy/html-api/
 
 %changelog
+* Wed Aug 21 2013 Remi Collet <rcollet@redhat.com> - 0.2.1-2
+- rebuild for new libzip
+
 * Fri Aug 09 2013 Alexandru Gagniuc <mr.nuke.me@gmail.com> - 0.2.1-1
 - Update to libsigrok 0.2.1
 
