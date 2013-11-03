@@ -1,11 +1,15 @@
 Name:           libsigrok
 Version:        0.2.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
 URL:            http://www.sigrok.org/
 Source0:        http://sigrok.org/download/source/libsigrok/%{name}-%{version}.tar.gz
+# http://sigrok.org/gitweb/?p=libsigrok.git;a=commit;h=b775d753e3874d69ee342b1d6c0961a6f1494f18
+Patch0:		%{name}-0.2.1-rigol.patch
+# http://sigrok.org/gitweb/?p=libsigrok.git;a=commit;h=da970d24ecfcf67f89a9532f3a53ade8cb1131ed
+Patch1:		%{name}-0.2.1-usb.patch
 
 BuildRequires:  glib2-devel
 BuildRequires:  libzip-devel
@@ -44,6 +48,8 @@ with %{name}.
 
 %prep
 %setup -q
+%patch0 -p1 -b .rigol
+%patch1 -p1 -b .usb
 
 
 %build
@@ -59,7 +65,7 @@ doxygen Doxyfile
 %install
 %make_install
 # Install udev rules
-install -D -p -m 0644 contrib/z60_libsigrok.rules %{buildroot}/lib/udev/rules.d/60_libsigrok.rules
+install -D -p -m 0644 contrib/z60_libsigrok.rules %{buildroot}/lib/udev/rules.d/60-libsigrok.rules
 
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
@@ -84,6 +90,11 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc doxy/html-api/
 
 %changelog
+* Sun Nov 03 2013 Dan Horák <dan[at]danny.cz> - 0.2.1-3
+- scan /sys/class/usbmisc
+- add support for Rigol DS1152 scopes with upgraded bandwidth
+- resolves: #1025968
+
 * Wed Aug 21 2013 Remi Collet <rcollet@redhat.com> - 0.2.1-2
 - rebuild for new libzip
 
