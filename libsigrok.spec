@@ -65,7 +65,7 @@ doxygen Doxyfile
 %install
 %make_install
 # Install udev rules
-install -D -p -m 0644 contrib/z60_libsigrok.rules %{buildroot}/lib/udev/rules.d/60-libsigrok.rules
+install -D -p -m 0644 contrib/z60_libsigrok.rules %{buildroot}%{_udevrulesdir}/60-libsigrok.rules
 
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
@@ -79,7 +79,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files
 %doc README README.devices NEWS COPYING
 %{_libdir}/libsigrok.so.1*
-/lib/udev/rules.d/60_libsigrok.rules
+%{_udevrulesdir}/60-libsigrok.rules
 
 %files devel
 %{_includedir}/libsigrok/
