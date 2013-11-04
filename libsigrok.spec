@@ -1,6 +1,6 @@
 Name:           libsigrok
 Version:        0.2.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -10,6 +10,8 @@ Source0:        http://sigrok.org/download/source/libsigrok/%{name}-%{version}.t
 Patch0:		%{name}-0.2.1-rigol.patch
 # http://sigrok.org/gitweb/?p=libsigrok.git;a=commit;h=da970d24ecfcf67f89a9532f3a53ade8cb1131ed
 Patch1:		%{name}-0.2.1-usb.patch
+# http://sigrok.org/gitweb/?p=libsigrok.git;a=commit;h=8dce54f7aa9eed362f2c9e41412c6b71ba1a32b6
+Patch2:		%{name}-0.2.1-udev.patch
 
 BuildRequires:  glib2-devel
 BuildRequires:  libzip-devel
@@ -50,6 +52,7 @@ with %{name}.
 %setup -q
 %patch0 -p1 -b .rigol
 %patch1 -p1 -b .usb
+%patch2 -p1 -b .udev
 
 
 %build
@@ -90,6 +93,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc doxy/html-api/
 
 %changelog
+* Mon Nov 04 2013 Dan Horák <dan[at]danny.cz> - 0.2.1-4
+- udev rules should react also on the usbmisc subsystem
+
 * Sun Nov 03 2013 Dan Horák <dan[at]danny.cz> - 0.2.1-3
 - scan /sys/class/usbmisc
 - add support for Rigol DS1152 scopes with upgraded bandwidth

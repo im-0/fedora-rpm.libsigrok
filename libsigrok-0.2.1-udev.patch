@@ -1,0 +1,22 @@
+commit 8dce54f7aa9eed362f2c9e41412c6b71ba1a32b6
+Author: Dan Horák <dan@danny.cz>
+Date:   Mon Nov 4 10:53:36 2013 +0100
+
+    update udev rules
+    
+    With usbtmc driver being classified under usbmisc in newer kernels the udev rules
+    need an update.
+
+diff --git a/contrib/z60_libsigrok.rules b/contrib/z60_libsigrok.rules
+index 4632827..ad74bf7 100644
+--- a/contrib/z60_libsigrok.rules
++++ b/contrib/z60_libsigrok.rules
+@@ -23,7 +23,7 @@
+ ##
+ 
+ ACTION!="add|change", GOTO="libsigrok_rules_end"
+-SUBSYSTEM!="usb|usb_device", GOTO="libsigrok_rules_end"
++SUBSYSTEM!="usb|usbmisc|usb_device", GOTO="libsigrok_rules_end"
+ 
+ # ASIX SIGMA
+ # ASIX SIGMA2
