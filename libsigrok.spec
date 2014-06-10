@@ -1,6 +1,6 @@
 Name:           libsigrok
 Version:        0.2.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -8,6 +8,8 @@ URL:            http://www.sigrok.org/
 Source0:        http://sigrok.org/download/source/libsigrok/%{name}-%{version}.tar.gz
 # http://sigrok.org/gitweb/?p=libsigrok.git;a=commit;h=8dce54f7aa9eed362f2c9e41412c6b71ba1a32b6
 Patch0:		%{name}-0.2.1-udev.patch
+# update for libftdi-1 detection
+Patch1:		%{name}-0.2.2-libftdi1.patch
 
 BuildRequires:  glib2-devel
 BuildRequires:  libzip-devel
@@ -19,6 +21,7 @@ BuildRequires:  doxygen
 BuildRequires:  graphviz
 # link-mso19 driver was disabed by upstream for this release (only udev user)
 #BuildRequires:  libudev-devel
+BuildRequires:	libtool
 
 %description
 %{name} is a shared library written in C which provides the basic API
@@ -48,6 +51,9 @@ with %{name}.
 %prep
 %setup -q
 %patch0 -p1 -b .udev
+%patch1 -p1 -b .ftdi1
+
+autoreconf -vif
 
 
 %build
@@ -89,6 +95,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Tue Jun 10 2014 Dan Horák <dan[at]danny.cz> - 0.2.2-3
+- rebuilt for libftdi1
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.2.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
