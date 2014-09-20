@@ -1,26 +1,22 @@
 Name:           libsigrok
-Version:        0.2.2
-Release:        4%{?dist}
+Version:        0.3.0
+Release:        1%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
 URL:            http://www.sigrok.org/
 Source0:        http://sigrok.org/download/source/libsigrok/%{name}-%{version}.tar.gz
-# http://sigrok.org/gitweb/?p=libsigrok.git;a=commit;h=8dce54f7aa9eed362f2c9e41412c6b71ba1a32b6
-Patch0:		%{name}-0.2.1-udev.patch
-# update for libftdi-1 detection
-Patch1:		%{name}-0.2.2-libftdi1.patch
+# backport libftdi-1 detection from master
+Patch1:         %{name}-0.3.0-libftdi1.patch
 
 BuildRequires:  glib2-devel
 BuildRequires:  libzip-devel
 BuildRequires:  zlib-devel
 BuildRequires:  libusb1-devel
 BuildRequires:  libftdi-devel
-BuildRequires:  alsa-lib-devel
+BuildRequires:  libserialport-devel
 BuildRequires:  doxygen
 BuildRequires:  graphviz
-# link-mso19 driver was disabed by upstream for this release (only udev user)
-#BuildRequires:  libudev-devel
 BuildRequires:	libtool
 
 %description
@@ -50,17 +46,14 @@ with %{name}.
 
 %prep
 %setup -q
-%patch0 -p1 -b .udev
 %patch1 -p1 -b .ftdi1
 
 autoreconf -vif
 
 
 %build
-# alsa is the only driver that gets autodisabled when alsa-lib-devel is not
-# found, so we explicitly enable it to be sure we compile it
-%configure --disable-static --enable-alsa
-make %{?_smp_mflags}
+%configure --disable-static
+make %{?_smp_mflags} V=1
 
 # This builds documentation for the -doc package
 doxygen Doxyfile
@@ -70,7 +63,6 @@ doxygen Doxyfile
 %make_install
 # Install udev rules
 install -D -p -m 0644 contrib/z60_libsigrok.rules %{buildroot}%{_udevrulesdir}/60-libsigrok.rules
-
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
@@ -82,7 +74,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
 %doc README README.devices NEWS COPYING
-%{_libdir}/libsigrok.so.1*
+%{_libdir}/libsigrok.so.2*
 %{_udevrulesdir}/60-libsigrok.rules
 
 %files devel
@@ -95,6 +87,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Sat Sep 20 2014 Dan Horák <dan[at]danny.cz> - 0.3.0-1
+- update to libsigrok 0.3.0
+
 * Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.2.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
