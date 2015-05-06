@@ -1,6 +1,6 @@
 Name:           libsigrok
 Version:        0.3.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -87,6 +87,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Wed May 06 2015 Remi Collet <remi@fedoraproject.org> - 0.3.0-2
+- rebuild for new libzip
+
 * Sat Sep 20 2014 Dan Horák <dan[at]danny.cz> - 0.3.0-1
 - update to libsigrok 0.3.0
 
