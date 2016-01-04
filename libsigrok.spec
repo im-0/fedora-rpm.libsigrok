@@ -1,6 +1,6 @@
 Name:           libsigrok
 Version:        0.3.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -8,6 +8,7 @@ URL:            http://www.sigrok.org/
 Source0:        http://sigrok.org/download/source/libsigrok/%{name}-%{version}.tar.gz
 # backport libftdi-1 detection from master
 Patch1:         %{name}-0.3.0-libftdi1.patch
+Patch2:         %{name}-0.3.0-fix-udev-rules-uaccess-tag.patch
 
 BuildRequires:  glib2-devel
 BuildRequires:  libzip-devel
@@ -47,6 +48,7 @@ with %{name}.
 %prep
 %setup -q
 %patch1 -p1 -b .ftdi1
+%patch2 -p1 -b .uaccess
 
 autoreconf -vif
 
@@ -87,6 +89,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Mon Jan 04 2016 Alexandru Gagniuc <mr.nuke.me@gmail.com> - 0.3.0-4
+- Fix used rules to use "uaccess" tag instead of "plugdev" group
+
 * Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.3.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
