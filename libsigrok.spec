@@ -1,24 +1,23 @@
 Name:           libsigrok
-Version:        0.3.0
-Release:        5%{?dist}
+Version:        0.4.0
+Release:        0%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
 URL:            http://www.sigrok.org/
 Source0:        http://sigrok.org/download/source/libsigrok/%{name}-%{version}.tar.gz
-# backport libftdi-1 detection from master
-Patch1:         %{name}-0.3.0-libftdi1.patch
-Patch2:         %{name}-0.3.0-fix-udev-rules-uaccess-tag.patch
 
 BuildRequires:  glib2-devel
+BuildRequires:  glibmm24-devel
 BuildRequires:  libzip-devel
 BuildRequires:  zlib-devel
+BuildRequires:  libieee1284-devel
 BuildRequires:  libusb1-devel
 BuildRequires:  libftdi-devel
-BuildRequires:  libserialport-devel
+BuildRequires:  libserialport-devel     >= 0.1.1
 BuildRequires:  doxygen
 BuildRequires:  graphviz
-BuildRequires:	libtool
+BuildRequires:  libtool
 
 %description
 %{name} is a shared library written in C which provides the basic API
@@ -34,6 +33,20 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package        cxx
+Summary:        C++ bindings for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    cxx
+The %{name}-cxx package contains C++ libraries for %{name}.
+
+%package        cxx-devel
+Summary:        Development files for  %{name} C++ bindings
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    cxx-devel
+The %{name}-cxx-devel package contains libraries and header files for
+developing applications that use %{name} C++ bindings.
 
 %package        doc
 Group:          Documentation
@@ -47,10 +60,8 @@ with %{name}.
 
 %prep
 %setup -q
-%patch1 -p1 -b .ftdi1
-%patch2 -p1 -b .uaccess
-
-autoreconf -vif
+# Replace GROUP="plugdev" with TAG+="uaccess"
+sed 's/MODE=\"[0-9]*\", GROUP=\"plugdev\"/TAG += \"uaccess\"/g' contrib/z60_libsigrok.rules -i
 
 
 %build
@@ -76,7 +87,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
 %doc README README.devices NEWS COPYING
-%{_libdir}/libsigrok.so.2*
+%{_libdir}/libsigrok.so.3*
 %{_udevrulesdir}/60-libsigrok.rules
 
 %files devel
@@ -84,11 +95,27 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_libdir}/libsigrok.so
 %{_libdir}/pkgconfig/libsigrok.pc
 
+%files cxx
+%{_libdir}/libsigrokcxx.so.3*
+
+%files cxx-devel
+%{_includedir}/libsigrokcxx/
+%{_libdir}/libsigrokcxx.so
+%{_libdir}/pkgconfig/libsigrokcxx.pc
+
 %files doc
 %doc doxy/html-api/
 
 
 %changelog
+* Sat Feb 06 2016 Alexandru Gagniuc <mr.nuke.me@gmail.com> - 0.4.0-0
+- Update to libsigrok 0.4.0
+- Convert GROUP="plugdev" udev rules to TAG+="uaccess" using sed
+- Add "cxx" and "cxx-devel" packages for C++ bindings.
+- Add minimum version (0.1.1) for libserialport-devel package
+- Add libieee1284-devel dependency for "hung-chang-dso-2100" driver
+- Remove autoreconf step, as it is no longer needed
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.3.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
