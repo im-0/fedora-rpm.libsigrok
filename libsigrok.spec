@@ -1,6 +1,6 @@
 Name:           libsigrok
 Version:        0.4.0
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -42,7 +42,7 @@ The %{name}-cxx package contains C++ libraries for %{name}.
 
 %package        cxx-devel
 Summary:        Development files for  %{name} C++ bindings
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}-cxx%{?_isa} = %{version}-%{release}
 
 %description    cxx-devel
 The %{name}-cxx-devel package contains libraries and header files for
@@ -81,8 +81,10 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %post -p /sbin/ldconfig
+%post cxx -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
+%postun cxx -p /sbin/ldconfig
 
 
 %files
@@ -108,6 +110,10 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Fri Feb 12 2016 Alexandru Gagniuc <mr.nuke.me@gmail.com> - 0.4.0-1
+- "cxx-devel" subpackage "Requires" libsigrok-cxx, not libsigrok
+- Add "post" and "postun" steps for "cxx" subpackage
+
 * Sat Feb 06 2016 Alexandru Gagniuc <mr.nuke.me@gmail.com> - 0.4.0-0
 - Update to libsigrok 0.4.0
 - Convert GROUP="plugdev" udev rules to TAG+="uaccess" using sed
