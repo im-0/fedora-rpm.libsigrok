@@ -1,6 +1,6 @@
 Name:           libsigrok
 Version:        0.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -110,6 +110,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Fri Feb 12 2016 Alexandru Gagniuc <mr.nuke.me@gmail.com> - 0.4.0-1
 - "cxx-devel" subpackage "Requires" libsigrok-cxx, not libsigrok
 - Add "post" and "postun" steps for "cxx" subpackage
