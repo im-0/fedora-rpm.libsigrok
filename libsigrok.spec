@@ -70,8 +70,9 @@ sed -e 's/MODE="[0-9]*", GROUP="plugdev", //g' contrib/z60_libsigrok.rules -i
 %configure --disable-static --disable-python --disable-gpib
 make %{?_smp_mflags} V=1
 
-# This builds documentation for the -doc package
-doxygen Doxyfile
+# Doxygen produces different output based on the build arch. This will make
+# our builds fail since -doc is a noarch package.
+echo "Documentation not packaged in this version" > README.fedora
 
 
 %install
@@ -113,7 +114,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_libdir}/pkgconfig/libsigrokcxx.pc
 
 %files doc
-%doc doxy/html-api/
+%doc README.fedora
 
 
 %changelog
