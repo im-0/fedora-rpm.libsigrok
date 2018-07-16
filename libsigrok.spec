@@ -7,6 +7,7 @@ License:        GPLv3+
 URL:            http://www.sigrok.org/
 Source0:        http://sigrok.org/download/source/libsigrok/%{name}-%{version}.tar.gz
 
+BuildRequires:  gcc-c++
 BuildRequires:  glib2-devel
 BuildRequires:  glibmm24-devel
 BuildRequires:  libzip-devel
