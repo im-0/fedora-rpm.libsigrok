@@ -1,6 +1,6 @@
 Name:           libsigrok
-Version:        0.5.0
-Release:        5%{?dist}
+Version:        0.5.1
+Release:        1%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -61,13 +61,14 @@ with %{name}.
 
 %prep
 %setup -q
-# Remove GROUP="plugdev" specifiers
-sed -e 's/MODE="[0-9]*", GROUP="plugdev", //g' contrib/z60_libsigrok.rules -i
+# Upstream thinks it's a good idea to have two udev files. We disagree.
+sed -e 's/ENV{ID_SIGROK}="1"/TAG+="uaccess"/g' contrib/60-libsigrok.rules -i
 
 
 %build
 # --disable-gpib: Fedora doesn't ship libgpib
-# --disable-python: TODO Figure out hot to properly package the python bindings
+# --disable-python: We don't package python bindings because they are a PITA
+#                   for maintainers and are pretty horrible and useless anyway
 %configure --disable-static --disable-python --disable-gpib
 make %{?_smp_mflags} V=1
 
@@ -79,7 +80,7 @@ echo "Documentation not packaged in this version" > README.fedora
 %install
 %make_install
 # Install udev rules
-install -D -p -m 0644 contrib/z60_libsigrok.rules %{buildroot}%{_udevrulesdir}/60-libsigrok.rules
+install -D -p -m 0644 contrib/60-libsigrok.rules %{buildroot}%{_udevrulesdir}/60-libsigrok.rules
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
@@ -99,7 +100,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 # TODO: What are we supposed to do with these icons and MIME types?
 %exclude %{_datadir}/icons/hicolor/48x48/mimetypes/libsigrok.png
 %exclude %{_datadir}/icons/hicolor/scalable/mimetypes/libsigrok.svg
-%exclude %{_datadir}/mime/application/vnd.sigrok.session.xml
+%exclude %{_datadir}/mime/packages/vnd.sigrok.session.xml
 
 %files devel
 %{_includedir}/libsigrok/
@@ -119,6 +120,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Wed Nov 28 2018 mrnuke <mr.nuke.me@gmail.com> - 0.5.1-1
+- New and excitinf libsigrok-0.5.1 release
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.5.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
