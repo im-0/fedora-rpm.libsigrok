@@ -84,13 +84,8 @@ install -D -p -m 0644 contrib/60-libsigrok.rules %{buildroot}%{_udevrulesdir}/60
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-
-%post -p /sbin/ldconfig
-%post cxx -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-%postun cxx -p /sbin/ldconfig
-
+%ldconfig_scriptlets
+%ldconfig_scriptlets cxx
 
 %files
 %doc README README.devices NEWS COPYING
