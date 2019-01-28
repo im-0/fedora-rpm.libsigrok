@@ -50,7 +50,6 @@ The %{name}-cxx-devel package contains libraries and header files for
 developing applications that use %{name} C++ bindings.
 
 %package        doc
-Group:          Documentation
 Summary:        API documentation for %{name}
 BuildArch:      noarch
 
