@@ -1,6 +1,6 @@
 Name:           libsigrok
 Version:        0.5.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -19,6 +19,7 @@ BuildRequires:  libserialport-devel     >= 0.1.1
 BuildRequires:  doxygen
 BuildRequires:  graphviz
 BuildRequires:  libtool
+BuildRequires:  libtirpc-devel
 
 %description
 %{name} is a shared library written in C which provides the basic API
@@ -68,7 +69,9 @@ sed -e 's/ENV{ID_SIGROK}="1"/TAG+="uaccess"/g' contrib/60-libsigrok.rules -i
 # --disable-gpib: Fedora doesn't ship libgpib
 # --disable-python: We don't package python bindings because they are a PITA
 #                   for maintainers and are pretty horrible and useless anyway
-%configure --disable-static --disable-python --disable-gpib
+# --disable-java: Be explicit rather than rely on missing java-devel
+# --disable-ruby: Be explicit rather than rely on missing ruby-devel
+%configure --disable-static --disable-python --disable-gpib --disable-java --disable-ruby CPPFLAGS=-I/usr/include/tirpc LDFLAGS=-ltirpc
 make %{?_smp_mflags} V=1
 
 # Doxygen produces different output based on the build arch. This will make
@@ -114,6 +117,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Fri Jun 28 2019 Dan Horák <dan[at]danny.cz> - 0.5.1-3
+- build with libtirpc to enable VXI (#1724865)
+
 * Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.5.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
