@@ -1,6 +1,6 @@
 Name:           libsigrok
-Version:        0.5.1
-Release:        4%{?dist}
+Version:        0.5.2
+Release:        1%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -117,6 +117,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Thu Dec 26 2019 Dan Horák <dan[at]danny.cz> - 0.5.2-1
+- update to libsigrok 0.5.2
+
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.5.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
