@@ -1,6 +1,6 @@
 Name:           libsigrok
 Version:        0.5.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Basic hardware access drivers for logic analyzers
 # Combined GPLv3+ and GPLv2+ and BSD
 License:        GPLv3+
@@ -20,6 +20,8 @@ BuildRequires:  doxygen
 BuildRequires:  graphviz
 BuildRequires:  libtool
 BuildRequires:  libtirpc-devel
+
+Patch1: 0001-Avoid-reordering-of-driver-pointers-in-the-driver-li.patch
 
 %description
 %{name} is a shared library written in C which provides the basic API
@@ -61,6 +63,7 @@ with %{name}.
 
 %prep
 %setup -q
+%patch1 -p1
 # Upstream thinks it's a good idea to have two udev files. We disagree.
 sed -e 's/ENV{ID_SIGROK}="1"/TAG+="uaccess"/g' contrib/60-libsigrok.rules -i
 
@@ -117,6 +120,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Tue Nov 03 2020 Ivan Mironov <mironov.ivan@gmail.com> - 0.5.2-4
+- Add patch to fix https://bugzilla.redhat.com/show_bug.cgi?id=1877485
+
 * Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.5.2-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 

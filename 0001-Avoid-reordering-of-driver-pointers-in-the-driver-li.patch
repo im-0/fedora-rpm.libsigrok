@@ -1,0 +1,57 @@
+From ff4d5c24835af59d40194305b6ad241225cfb560 Mon Sep 17 00:00:00 2001
+From: Ivan Mironov <mironov.ivan@gmail.com>
+Date: Tue, 3 Nov 2020 14:35:28 +0500
+Subject: [PATCH] Avoid reordering of driver pointers in the driver list
+ section
+
+This fixes missing drivers in LTO-enabled build.
+
+Fixes bug #1433
+---
+ src/driver_list_start.c  | 2 +-
+ src/driver_list_stop.c   | 2 +-
+ src/libsigrok-internal.h | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/driver_list_start.c b/src/driver_list_start.c
+index 7b6c7755c65f..5787b30b8333 100644
+--- a/src/driver_list_start.c
++++ b/src/driver_list_start.c
+@@ -28,6 +28,6 @@
+  */
+ 
+ SR_PRIV const struct sr_dev_driver *sr_driver_list__start[]
+-	__attribute__((section (SR_DRIVER_LIST_SECTION),
++	__attribute__((section (SR_DRIVER_LIST_SECTION), no_reorder,
+ 		       used, aligned(sizeof(struct sr_dev_driver *))))
+   = { NULL /* Dummy item, as zero length arrays are not allowed by C99 */ };
+diff --git a/src/driver_list_stop.c b/src/driver_list_stop.c
+index ff2c51de16e3..6fc91dd872fd 100644
+--- a/src/driver_list_stop.c
++++ b/src/driver_list_stop.c
+@@ -28,6 +28,6 @@
+  */
+ 
+ SR_PRIV const struct sr_dev_driver *sr_driver_list__stop[]
+-	__attribute__((section (SR_DRIVER_LIST_SECTION),
++	__attribute__((section (SR_DRIVER_LIST_SECTION), no_reorder,
+ 		       used, aligned(sizeof(struct sr_dev_driver *))))
+   = { NULL /* Dummy item, as zero length arrays are not allowed by C99 */ };
+diff --git a/src/libsigrok-internal.h b/src/libsigrok-internal.h
+index 98d1631e2f4a..a646dd730666 100644
+--- a/src/libsigrok-internal.h
++++ b/src/libsigrok-internal.h
+@@ -996,8 +996,8 @@ static inline void write_dblle_inc(uint8_t **p, double x)
+  */
+ #define SR_REGISTER_DEV_DRIVER_LIST(name, ...) \
+ 	static const struct sr_dev_driver *name[] \
+-		__attribute__((section (SR_DRIVER_LIST_SECTION), used, \
+-			aligned(sizeof(struct sr_dev_driver *)))) \
++		__attribute__((section (SR_DRIVER_LIST_SECTION), no_reorder, \
++			used, aligned(sizeof(struct sr_dev_driver *)))) \
+ 		= { \
+ 			__VA_ARGS__ \
+ 		};
+-- 
+2.28.0
+
